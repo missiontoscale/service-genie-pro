@@ -4,39 +4,156 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Sparkles, Plus, Trash2 } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 const NewQuote = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const [clientName, setClientName] = useState("");
+  const [clientEmail, setClientEmail] = useState("");
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
   const [items, setItems] = useState([
     { id: 1, description: "", quantity: 1, rate: 0 },
   ]);
+  const [loading, setLoading] = useState(false);
+  const [aiLoading, setAiLoading] = useState(false);
+
+  useEffect(() => {
+    checkAuth();
+  }, []);
+
+  const checkAuth = async () => {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) {
+      navigate("/login");
+    }
+  };
 
   const addItem = () => {
     setItems([...items, { id: Date.now(), description: "", quantity: 1, rate: 0 }]);
   };
 
   const removeItem = (id: number) => {
-    setItems(items.filter((item) => item.id !== id));
+    if (items.length > 1) {
+      setItems(items.filter((item) => item.id !== id));
+    }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const updateItem = (id: number, field: string, value: any) => {
+    setItems(items.map(item => 
+      item.id === id ? { ...item, [field]: value } : item
+    ));
+  };
+
+  const calculateTotals = () => {
+    const subtotal = items.reduce((sum, item) => sum + (item.quantity * item.rate), 0);
+    const tax = subtotal * 0.1;
+    const total = subtotal + tax;
+    return { subtotal, tax, total };
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    toast({
-      title: "Quote created!",
-      description: "Your quote has been created successfully.",
-    });
-    navigate("/dashboard/quotes");
+    setLoading(true);
+
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) throw new Error("Not authenticated");
+
+      const { subtotal, tax, total } = calculateTotals();
+
+      const { data: quote, error: quoteError } = await supabase
+        .from("quotes")
+        .insert({
+          user_id: session.user.id,
+          client_name: clientName,
+          client_email: clientEmail,
+          title,
+          description,
+          subtotal,
+          tax,
+          total,
+          status: "draft",
+        })
+        .select()
+        .single();
+
+      if (quoteError) throw quoteError;
+
+      const itemsToInsert = items.map(item => ({
+        quote_id: quote.id,
+        description: item.description,
+        quantity: item.quantity,
+        rate: item.rate,
+      }));
+
+      const { error: itemsError } = await supabase
+        .from("quote_items")
+        .insert(itemsToInsert);
+
+      if (itemsError) throw itemsError;
+
+      toast({
+        title: "Quote created!",
+        description: "Your quote has been created successfully.",
+      });
+      navigate("/dashboard/quotes");
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error.message,
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const generateWithAI = () => {
-    toast({
-      title: "AI Generation",
-      description: "AI-powered quote generation coming soon!",
-    });
+  const generateWithAI = async () => {
+    if (!description) {
+      toast({
+        title: "Description required",
+        description: "Please provide a description for AI to generate items.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setAiLoading(true);
+    try {
+      const { data, error } = await supabase.functions.invoke("generate-with-ai", {
+        body: { prompt: description, type: "quote" }
+      });
+
+      if (error) throw error;
+
+      if (data.title) setTitle(data.title);
+      if (data.items && data.items.length > 0) {
+        setItems(data.items.map((item: any, index: number) => ({
+          id: Date.now() + index,
+          description: item.description,
+          quantity: item.quantity,
+          rate: item.rate,
+        })));
+      }
+
+      toast({
+        title: "AI Generated!",
+        description: "Quote details have been generated successfully.",
+      });
+    } catch (error: any) {
+      toast({
+        title: "AI Generation Failed",
+        description: error.message || "Failed to generate quote with AI",
+        variant: "destructive",
+      });
+    } finally {
+      setAiLoading(false);
+    }
   };
 
   return (
@@ -48,9 +165,14 @@ const NewQuote = () => {
             Create a professional quote for your client
           </p>
         </div>
-        <Button variant="outline" onClick={generateWithAI} className="gap-2">
+        <Button 
+          variant="outline" 
+          onClick={generateWithAI} 
+          className="gap-2"
+          disabled={aiLoading}
+        >
           <Sparkles className="h-4 w-4" />
-          Generate with AI
+          {aiLoading ? "Generating..." : "Generate with AI"}
         </Button>
       </div>
 
@@ -63,17 +185,36 @@ const NewQuote = () => {
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="client">Client Name</Label>
-                <Input id="client" placeholder="Enter client name" required />
+                <Input 
+                  id="client" 
+                  placeholder="Enter client name" 
+                  value={clientName}
+                  onChange={(e) => setClientName(e.target.value)}
+                  required 
+                />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="email">Client Email</Label>
-                <Input id="email" type="email" placeholder="client@example.com" required />
+                <Input 
+                  id="email" 
+                  type="email" 
+                  placeholder="client@example.com"
+                  value={clientEmail}
+                  onChange={(e) => setClientEmail(e.target.value)}
+                  required 
+                />
               </div>
             </div>
 
             <div className="space-y-2">
               <Label htmlFor="title">Quote Title</Label>
-              <Input id="title" placeholder="E.g., Website Development Project" required />
+              <Input 
+                id="title" 
+                placeholder="E.g., Website Development Project"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                required 
+              />
             </div>
 
             <div className="space-y-2">
@@ -81,6 +222,8 @@ const NewQuote = () => {
               <Textarea
                 id="description"
                 placeholder="Describe the scope of work..."
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
                 rows={4}
               />
             </div>
@@ -98,15 +241,31 @@ const NewQuote = () => {
                 <div key={item.id} className="grid grid-cols-12 gap-3 items-end">
                   <div className="col-span-6 space-y-2">
                     <Label className="text-xs">Description</Label>
-                    <Input placeholder="Item description" />
+                    <Input 
+                      placeholder="Item description"
+                      value={item.description}
+                      onChange={(e) => updateItem(item.id, 'description', e.target.value)}
+                    />
                   </div>
                   <div className="col-span-2 space-y-2">
                     <Label className="text-xs">Quantity</Label>
-                    <Input type="number" min="1" defaultValue="1" />
+                    <Input 
+                      type="number" 
+                      min="1"
+                      value={item.quantity}
+                      onChange={(e) => updateItem(item.id, 'quantity', parseInt(e.target.value) || 1)}
+                    />
                   </div>
                   <div className="col-span-3 space-y-2">
                     <Label className="text-xs">Rate</Label>
-                    <Input type="number" min="0" step="0.01" placeholder="0.00" />
+                    <Input 
+                      type="number" 
+                      min="0" 
+                      step="0.01" 
+                      placeholder="0.00"
+                      value={item.rate}
+                      onChange={(e) => updateItem(item.id, 'rate', parseFloat(e.target.value) || 0)}
+                    />
                   </div>
                   <Button
                     type="button"
@@ -125,21 +284,21 @@ const NewQuote = () => {
             <div className="border-t pt-4 space-y-2">
               <div className="flex justify-between text-sm">
                 <span className="text-muted-foreground">Subtotal</span>
-                <span className="font-medium">$0.00</span>
+                <span className="font-medium">${calculateTotals().subtotal.toFixed(2)}</span>
               </div>
               <div className="flex justify-between text-sm">
                 <span className="text-muted-foreground">Tax (10%)</span>
-                <span className="font-medium">$0.00</span>
+                <span className="font-medium">${calculateTotals().tax.toFixed(2)}</span>
               </div>
               <div className="flex justify-between text-lg font-bold pt-2 border-t">
                 <span>Total</span>
-                <span>$0.00</span>
+                <span>${calculateTotals().total.toFixed(2)}</span>
               </div>
             </div>
 
             <div className="flex gap-3 pt-4">
-              <Button type="submit" className="flex-1">
-                Create Quote
+              <Button type="submit" className="flex-1" disabled={loading}>
+                {loading ? "Creating..." : "Create Quote"}
               </Button>
               <Button
                 type="button"

@@ -14,7 +14,169 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      invoice_items: {
+        Row: {
+          created_at: string
+          description: string
+          id: string
+          invoice_id: string
+          quantity: number
+          rate: number
+        }
+        Insert: {
+          created_at?: string
+          description: string
+          id?: string
+          invoice_id: string
+          quantity?: number
+          rate?: number
+        }
+        Update: {
+          created_at?: string
+          description?: string
+          id?: string
+          invoice_id?: string
+          quantity?: number
+          rate?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "invoice_items_invoice_id_fkey"
+            columns: ["invoice_id"]
+            isOneToOne: false
+            referencedRelation: "invoices"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      invoices: {
+        Row: {
+          client_email: string
+          client_name: string
+          created_at: string
+          due_date: string
+          id: string
+          invoice_number: string
+          notes: string | null
+          status: string
+          subtotal: number
+          tax: number
+          total: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          client_email: string
+          client_name: string
+          created_at?: string
+          due_date: string
+          id?: string
+          invoice_number: string
+          notes?: string | null
+          status?: string
+          subtotal?: number
+          tax?: number
+          total?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          client_email?: string
+          client_name?: string
+          created_at?: string
+          due_date?: string
+          id?: string
+          invoice_number?: string
+          notes?: string | null
+          status?: string
+          subtotal?: number
+          tax?: number
+          total?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      quote_items: {
+        Row: {
+          created_at: string
+          description: string
+          id: string
+          quantity: number
+          quote_id: string
+          rate: number
+        }
+        Insert: {
+          created_at?: string
+          description: string
+          id?: string
+          quantity?: number
+          quote_id: string
+          rate?: number
+        }
+        Update: {
+          created_at?: string
+          description?: string
+          id?: string
+          quantity?: number
+          quote_id?: string
+          rate?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "quote_items_quote_id_fkey"
+            columns: ["quote_id"]
+            isOneToOne: false
+            referencedRelation: "quotes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      quotes: {
+        Row: {
+          client_email: string
+          client_name: string
+          created_at: string
+          description: string | null
+          id: string
+          status: string
+          subtotal: number
+          tax: number
+          title: string
+          total: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          client_email: string
+          client_name: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          status?: string
+          subtotal?: number
+          tax?: number
+          title: string
+          total?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          client_email?: string
+          client_name?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          status?: string
+          subtotal?: number
+          tax?: number
+          title?: string
+          total?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

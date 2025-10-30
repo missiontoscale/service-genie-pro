@@ -1,6 +1,10 @@
-import { Link, Outlet, useLocation } from "react-router-dom";
-import { FileText, Receipt, Home, Sparkles } from "lucide-react";
+import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
+import { FileText, Receipt, Home, Sparkles, LogOut } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { supabase } from "@/integrations/supabase/client";
+import { useEffect } from "react";
+import { useToast } from "@/hooks/use-toast";
 
 const navigation = [
   { name: "Overview", href: "/dashboard", icon: Home },
@@ -10,6 +14,36 @@ const navigation = [
 
 const Dashboard = () => {
   const location = useLocation();
+  const navigate = useNavigate();
+  const { toast } = useToast();
+
+  useEffect(() => {
+    checkAuth();
+  }, []);
+
+  const checkAuth = async () => {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) {
+      navigate("/login");
+    }
+  };
+
+  const handleLogout = async () => {
+    const { error } = await supabase.auth.signOut();
+    if (error) {
+      toast({
+        title: "Error",
+        description: error.message,
+        variant: "destructive",
+      });
+    } else {
+      toast({
+        title: "Logged out",
+        description: "You've been successfully logged out.",
+      });
+      navigate("/");
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background to-secondary/30">
@@ -21,12 +55,23 @@ const Dashboard = () => {
               QuoteFlow AI
             </h1>
           </div>
-          <Link
-            to="/"
-            className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-          >
-            Back to Home
-          </Link>
+          <div className="flex items-center gap-4">
+            <Link
+              to="/"
+              className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+            >
+              Back to Home
+            </Link>
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              onClick={handleLogout}
+              className="gap-2"
+            >
+              <LogOut className="h-4 w-4" />
+              Logout
+            </Button>
+          </div>
         </div>
       </header>
 
