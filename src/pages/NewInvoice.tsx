@@ -3,34 +3,71 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Sparkles, Plus, Trash2 } from "lucide-react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Sparkles, Plus, Trash2, Download, RefreshCw } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { currencies, convertCurrency, getCurrencySymbol, detectCurrencyFromText } from "@/lib/currencyUtils";
+import { exportToPDF, exportToCSV, exportToJSON } from "@/lib/exportUtils";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const NewInvoice = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [clientName, setClientName] = useState("");
   const [clientEmail, setClientEmail] = useState("");
+  const [providerName, setProviderName] = useState("");
+  const [providerEmail, setProviderEmail] = useState("");
+  const [providerAddress, setProviderAddress] = useState("");
   const [invoiceNumber, setInvoiceNumber] = useState("");
   const [dueDate, setDueDate] = useState("");
   const [notes, setNotes] = useState("");
+  const [currency, setCurrency] = useState("USD");
   const [items, setItems] = useState([
     { id: 1, description: "", quantity: 1, rate: 0 },
   ]);
   const [loading, setLoading] = useState(false);
   const [aiLoading, setAiLoading] = useState(false);
+  const [showConversion, setShowConversion] = useState(false);
+  const [createdInvoiceData, setCreatedInvoiceData] = useState<any>(null);
 
   useEffect(() => {
     checkAuth();
+    loadUserProfile();
   }, []);
 
   const checkAuth = async () => {
     const { data: { session } } = await supabase.auth.getSession();
     if (!session) {
       navigate("/login");
+    }
+  };
+
+  const loadUserProfile = async () => {
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) return;
+
+      const { data: profile } = await supabase
+        .from("user_profiles")
+        .select("*")
+        .eq("user_id", session.user.id)
+        .maybeSingle();
+
+      if (profile) {
+        setProviderName(profile.business_name || "");
+        setProviderEmail(profile.business_email || "");
+        setProviderAddress(profile.business_address || "");
+      }
+    } catch (error) {
+      console.error("Error loading profile:", error);
     }
   };
 
@@ -73,9 +110,13 @@ const NewInvoice = () => {
           user_id: session.user.id,
           client_name: clientName,
           client_email: clientEmail,
+          provider_name: providerName,
+          provider_email: providerEmail,
+          provider_address: providerAddress,
           invoice_number: invoiceNumber,
           due_date: dueDate,
           notes,
+          currency,
           subtotal,
           tax,
           total,
@@ -99,11 +140,28 @@ const NewInvoice = () => {
 
       if (itemsError) throw itemsError;
 
+      setCreatedInvoiceData({
+        number: invoiceNumber,
+        clientName,
+        clientEmail,
+        providerName,
+        providerEmail,
+        providerAddress,
+        items,
+        subtotal,
+        tax,
+        total,
+        currency,
+        date: new Date().toLocaleDateString(),
+        dueDate: new Date(dueDate).toLocaleDateString(),
+        notes,
+        type: 'invoice' as const,
+      });
+
       toast({
         title: "Invoice created!",
         description: "Your invoice has been created successfully.",
       });
-      navigate("/dashboard/invoices");
     } catch (error: any) {
       toast({
         title: "Error",
@@ -113,6 +171,20 @@ const NewInvoice = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleConvertCurrency = (newCurrency: string) => {
+    const convertedItems = items.map(item => ({
+      ...item,
+      rate: convertCurrency(item.rate, currency, newCurrency),
+    }));
+    setItems(convertedItems);
+    setCurrency(newCurrency);
+    setShowConversion(false);
+    toast({
+      title: "Currency converted",
+      description: `All amounts have been converted to ${newCurrency}`,
+    });
   };
 
   const generateWithAI = async () => {
@@ -127,6 +199,16 @@ const NewInvoice = () => {
 
     setAiLoading(true);
     try {
+      // Detect currency from notes
+      const detectedCurrency = detectCurrencyFromText(notes);
+      if (detectedCurrency !== currency) {
+        setCurrency(detectedCurrency);
+        toast({
+          title: "Currency detected",
+          description: `Detected ${detectedCurrency} from your description`,
+        });
+      }
+
       const { data, error } = await supabase.functions.invoke("generate-with-ai", {
         body: { prompt: notes, type: "invoice" }
       });
@@ -158,6 +240,56 @@ const NewInvoice = () => {
     }
   };
 
+  if (createdInvoiceData) {
+    return (
+      <div className="max-w-4xl mx-auto space-y-6">
+        <Card>
+          <CardHeader>
+            <CardTitle>Invoice Created Successfully!</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <p className="text-muted-foreground">
+              Your invoice has been created. You can now export it in your preferred format.
+            </p>
+            <div className="flex gap-3 flex-wrap">
+              <Button onClick={() => exportToPDF(createdInvoiceData)} className="gap-2">
+                <Download className="h-4 w-4" />
+                Export as PDF
+              </Button>
+              <Button onClick={() => exportToCSV(createdInvoiceData)} variant="outline" className="gap-2">
+                <Download className="h-4 w-4" />
+                Export as CSV
+              </Button>
+              <Button onClick={() => exportToJSON(createdInvoiceData)} variant="outline" className="gap-2">
+                <Download className="h-4 w-4" />
+                Export as JSON
+              </Button>
+            </div>
+            <div className="flex gap-3 pt-4 border-t">
+              <Button onClick={() => navigate("/dashboard/invoices")} className="flex-1">
+                View All Invoices
+              </Button>
+              <Button
+                onClick={() => {
+                  setCreatedInvoiceData(null);
+                  setClientName("");
+                  setClientEmail("");
+                  setInvoiceNumber("");
+                  setDueDate("");
+                  setNotes("");
+                  setItems([{ id: 1, description: "", quantity: 1, rate: 0 }]);
+                }}
+                variant="outline"
+              >
+                Create Another
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
   return (
     <div className="max-w-4xl mx-auto space-y-6">
       <div className="flex items-center justify-between">
@@ -167,15 +299,36 @@ const NewInvoice = () => {
             Create a professional invoice for your client
           </p>
         </div>
-        <Button 
-          variant="outline" 
-          onClick={generateWithAI} 
-          className="gap-2"
-          disabled={aiLoading}
-        >
-          <Sparkles className="h-4 w-4" />
-          {aiLoading ? "Generating..." : "Generate with AI"}
-        </Button>
+        <div className="flex gap-2">
+          <DropdownMenu open={showConversion} onOpenChange={setShowConversion}>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" className="gap-2">
+                <RefreshCw className="h-4 w-4" />
+                Convert Currency
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-56">
+              {currencies.map((curr) => (
+                <DropdownMenuItem
+                  key={curr.code}
+                  onClick={() => handleConvertCurrency(curr.code)}
+                  disabled={curr.code === currency}
+                >
+                  {curr.symbol} {curr.code} - {curr.name}
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
+          <Button 
+            variant="outline" 
+            onClick={generateWithAI} 
+            className="gap-2"
+            disabled={aiLoading}
+          >
+            <Sparkles className="h-4 w-4" />
+            {aiLoading ? "Generating..." : "Generate with AI"}
+          </Button>
+        </div>
       </div>
 
       <form onSubmit={handleSubmit}>
@@ -184,31 +337,69 @@ const NewInvoice = () => {
             <CardTitle>Invoice Details</CardTitle>
           </CardHeader>
           <CardContent className="space-y-6">
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="client">Client Name</Label>
-                <Input 
-                  id="client" 
-                  placeholder="Enter client name"
-                  value={clientName}
-                  onChange={(e) => setClientName(e.target.value)}
-                  required 
-                />
+            <div className="space-y-4">
+              <h3 className="font-semibold">Service Provider Details</h3>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="provider-name">Your Business Name</Label>
+                  <Input 
+                    id="provider-name" 
+                    placeholder="Your business name"
+                    value={providerName}
+                    onChange={(e) => setProviderName(e.target.value)}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="provider-email">Your Business Email</Label>
+                  <Input 
+                    id="provider-email" 
+                    type="email" 
+                    placeholder="business@example.com"
+                    value={providerEmail}
+                    onChange={(e) => setProviderEmail(e.target.value)}
+                  />
+                </div>
               </div>
               <div className="space-y-2">
-                <Label htmlFor="email">Client Email</Label>
-                <Input 
-                  id="email" 
-                  type="email" 
-                  placeholder="client@example.com"
-                  value={clientEmail}
-                  onChange={(e) => setClientEmail(e.target.value)}
-                  required 
+                <Label htmlFor="provider-address">Your Business Address</Label>
+                <Textarea
+                  id="provider-address"
+                  placeholder="Street address, City, State, ZIP"
+                  value={providerAddress}
+                  onChange={(e) => setProviderAddress(e.target.value)}
+                  rows={2}
                 />
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-4 border-t pt-4">
+              <h3 className="font-semibold">Client Details</h3>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="client">Client Name</Label>
+                  <Input 
+                    id="client" 
+                    placeholder="Enter client name"
+                    value={clientName}
+                    onChange={(e) => setClientName(e.target.value)}
+                    required 
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="email">Client Email</Label>
+                  <Input 
+                    id="email" 
+                    type="email" 
+                    placeholder="client@example.com"
+                    value={clientEmail}
+                    onChange={(e) => setClientEmail(e.target.value)}
+                    required 
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-3 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="invoice-number">Invoice Number</Label>
                 <Input 
@@ -228,6 +419,21 @@ const NewInvoice = () => {
                   onChange={(e) => setDueDate(e.target.value)}
                   required 
                 />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="currency">Currency</Label>
+                <Select value={currency} onValueChange={setCurrency}>
+                  <SelectTrigger id="currency">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {currencies.map((curr) => (
+                      <SelectItem key={curr.code} value={curr.code}>
+                        {curr.symbol} {curr.code} - {curr.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
             </div>
 
@@ -298,15 +504,15 @@ const NewInvoice = () => {
             <div className="border-t pt-4 space-y-2">
               <div className="flex justify-between text-sm">
                 <span className="text-muted-foreground">Subtotal</span>
-                <span className="font-medium">${calculateTotals().subtotal.toFixed(2)}</span>
+                <span className="font-medium">{getCurrencySymbol(currency)}{calculateTotals().subtotal.toFixed(2)}</span>
               </div>
               <div className="flex justify-between text-sm">
                 <span className="text-muted-foreground">Tax (10%)</span>
-                <span className="font-medium">${calculateTotals().tax.toFixed(2)}</span>
+                <span className="font-medium">{getCurrencySymbol(currency)}{calculateTotals().tax.toFixed(2)}</span>
               </div>
               <div className="flex justify-between text-lg font-bold pt-2 border-t">
                 <span>Total</span>
-                <span>${calculateTotals().total.toFixed(2)}</span>
+                <span>{getCurrencySymbol(currency)}{calculateTotals().total.toFixed(2)}</span>
               </div>
             </div>
 

@@ -54,10 +54,14 @@ export type Database = {
           client_email: string
           client_name: string
           created_at: string
+          currency: string
           due_date: string
           id: string
           invoice_number: string
           notes: string | null
+          provider_address: string | null
+          provider_email: string | null
+          provider_name: string | null
           status: string
           subtotal: number
           tax: number
@@ -69,10 +73,14 @@ export type Database = {
           client_email: string
           client_name: string
           created_at?: string
+          currency?: string
           due_date: string
           id?: string
           invoice_number: string
           notes?: string | null
+          provider_address?: string | null
+          provider_email?: string | null
+          provider_name?: string | null
           status?: string
           subtotal?: number
           tax?: number
@@ -84,10 +92,14 @@ export type Database = {
           client_email?: string
           client_name?: string
           created_at?: string
+          currency?: string
           due_date?: string
           id?: string
           invoice_number?: string
           notes?: string | null
+          provider_address?: string | null
+          provider_email?: string | null
+          provider_name?: string | null
           status?: string
           subtotal?: number
           tax?: number
@@ -137,8 +149,12 @@ export type Database = {
           client_email: string
           client_name: string
           created_at: string
+          currency: string
           description: string | null
           id: string
+          provider_address: string | null
+          provider_email: string | null
+          provider_name: string | null
           status: string
           subtotal: number
           tax: number
@@ -151,8 +167,12 @@ export type Database = {
           client_email: string
           client_name: string
           created_at?: string
+          currency?: string
           description?: string | null
           id?: string
+          provider_address?: string | null
+          provider_email?: string | null
+          provider_name?: string | null
           status?: string
           subtotal?: number
           tax?: number
@@ -165,13 +185,47 @@ export type Database = {
           client_email?: string
           client_name?: string
           created_at?: string
+          currency?: string
           description?: string | null
           id?: string
+          provider_address?: string | null
+          provider_email?: string | null
+          provider_name?: string | null
           status?: string
           subtotal?: number
           tax?: number
           title?: string
           total?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_profiles: {
+        Row: {
+          business_address: string | null
+          business_email: string | null
+          business_name: string | null
+          created_at: string
+          id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          business_address?: string | null
+          business_email?: string | null
+          business_name?: string | null
+          created_at?: string
+          id?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          business_address?: string | null
+          business_email?: string | null
+          business_name?: string | null
+          created_at?: string
+          id?: string
           updated_at?: string
           user_id?: string
         }
