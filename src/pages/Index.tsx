@@ -1,8 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { Sparkles, FileText, Receipt, Zap, CheckCircle2 } from "lucide-react";
-import heroImage from "@/assets/hero-business.jpg";
+import { Sparkles, FileText, Receipt, Zap, CheckCircle2, Users } from "lucide-react";
 import Footer from "@/components/Footer";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 
 const features = [
   {
@@ -32,77 +32,69 @@ const Index = () => {
     <div className="min-h-screen">
       <header className="border-b border-border bg-background/95 backdrop-blur-sm sticky top-0 z-50">
         <div className="container mx-auto px-6 py-4">
-          <div className="flex items-center justify-between">
-            {/* Left: Logo + Name */}
+          <div className="flex items-center justify-center gap-32">
             <Link to="/" className="flex items-center gap-2">
               <Sparkles className="h-6 w-6 text-primary" />
               <span className="text-xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
                 QuoteFlow AI
               </span>
             </Link>
-
-            {/* Center: Main Navigation */}
+            
             <nav className="hidden md:flex items-center gap-8">
-              <Link to="/pricing" className="text-sm font-medium hover:text-primary transition-colors">
-                Pricing
+              <Link to="/" className="text-sm font-medium text-primary">
+                Home
+              </Link>
+              <Link to="/about" className="text-sm font-medium hover:text-primary transition-colors">
+                About
               </Link>
               <Link to="/blog" className="text-sm font-medium hover:text-primary transition-colors">
                 Blog
               </Link>
-              <a href="#features" className="text-sm font-medium hover:text-primary transition-colors">
-                Features
-              </a>
+              <Link to="/pricing" className="text-sm font-medium hover:text-primary transition-colors">
+                Pricing
+              </Link>
             </nav>
-
-            {/* Right: Dashboard */}
+            
             <Link to="/dashboard">
-              <Button>Dashboard</Button>
+              <Avatar className="cursor-pointer hover:ring-2 hover:ring-primary transition-all">
+                <AvatarFallback className="bg-primary text-primary-foreground">
+                  <Users className="h-5 w-5" />
+                </AvatarFallback>
+              </Avatar>
             </Link>
           </div>
         </div>
       </header>
 
       <main>
-        <section className="relative overflow-hidden">
-          <div className="absolute inset-0 bg-[var(--gradient-hero)]" />
-          <div className="absolute inset-0 opacity-30">
-            <img 
-              src={heroImage} 
-              alt="Professional business platform" 
-              className="w-full h-full object-cover"
-            />
-          </div>
-          <div className="relative container mx-auto px-6 py-24 md:py-32">
-            <div className="max-w-3xl mx-auto text-center space-y-8">
-              <h2 className="text-5xl md:text-6xl font-bold tracking-tight">
-                Professional Quotes & Invoices
+        <section className="relative overflow-hidden bg-gradient-to-br from-primary/10 via-background to-accent/10">
+          <div className="container mx-auto px-6 py-24 md:py-32">
+            <div className="max-w-3xl space-y-8">
+              <h1 className="text-5xl md:text-6xl font-bold tracking-tight text-left">
+                Create Professional Quotes & Invoices in Minutes
                 <span className="block text-primary mt-2">Powered by AI</span>
-              </h2>
-              <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-                Create stunning quotes and invoices in minutes. Perfect for engineers, 
-                designers, consultants, and service providers.
+              </h1>
+              <p className="text-xl text-muted-foreground text-left">
+                Streamline your business documentation with intelligent automation. Built for freelancers, consultants, and service providers who value their time.
               </p>
-              <div className="flex gap-4 justify-center">
+              <div className="flex gap-4">
                 <Link to="/dashboard">
                   <Button size="lg" className="gap-2 shadow-lg">
                     <Sparkles className="h-5 w-5" />
-                    Start Creating
+                    Start Creating Free
                   </Button>
                 </Link>
-                <Button size="lg" variant="outline">
-                  Learn More
-                </Button>
               </div>
             </div>
           </div>
         </section>
 
-        <section className="py-24 bg-background">
+        <section id="features" className="py-24 bg-background">
           <div className="container mx-auto px-6">
-            <div className="text-center mb-16">
-              <h3 className="text-3xl font-bold mb-4">Everything You Need</h3>
-              <p className="text-muted-foreground text-lg">
-                Powerful features designed for modern professionals
+            <div className="mb-16">
+              <h2 className="text-3xl font-bold mb-4 text-left">Everything You Need to Manage Your Business</h2>
+              <p className="text-muted-foreground text-lg text-left">
+                Powerful features that save you time and help you look professional
               </p>
             </div>
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -126,17 +118,19 @@ const Index = () => {
         </section>
 
         <section className="py-24 bg-gradient-to-br from-primary/10 via-background to-accent/10">
-          <div className="container mx-auto px-6 text-center">
-            <h3 className="text-3xl font-bold mb-4">Ready to Get Started?</h3>
-            <p className="text-muted-foreground text-lg mb-8 max-w-2xl mx-auto">
-              Join thousands of professionals who trust QuoteFlow AI for their business needs
-            </p>
-            <Link to="/dashboard">
-              <Button size="lg" className="gap-2 shadow-lg">
-                <Sparkles className="h-5 w-5" />
-                Create Your First Quote
-              </Button>
-            </Link>
+          <div className="container mx-auto px-6">
+            <div className="max-w-2xl">
+              <h2 className="text-3xl font-bold mb-4 text-left">Ready to Transform Your Workflow?</h2>
+              <p className="text-muted-foreground text-lg mb-8 text-left">
+                Join professionals worldwide who save hours every week with AI-powered business documentation
+              </p>
+              <Link to="/dashboard">
+                <Button size="lg" className="gap-2 shadow-lg">
+                  <Sparkles className="h-5 w-5" />
+                  Create Your First Document
+                </Button>
+              </Link>
+            </div>
           </div>
         </section>
       </main>

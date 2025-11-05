@@ -1,8 +1,9 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Link } from "react-router-dom";
-import { Check, Sparkles } from "lucide-react";
+import { Check, Sparkles, Users } from "lucide-react";
 import Footer from "@/components/Footer";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 
 const pricingTiers = [
   {
@@ -50,26 +51,35 @@ const Pricing = () => {
     <div className="min-h-screen flex flex-col">
       <header className="border-b border-border bg-background/95 backdrop-blur-sm sticky top-0 z-50">
         <div className="container mx-auto px-6 py-4">
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-center gap-32">
             <Link to="/" className="flex items-center gap-2">
               <Sparkles className="h-6 w-6 text-primary" />
               <span className="text-xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
                 QuoteFlow AI
               </span>
             </Link>
+            
             <nav className="hidden md:flex items-center gap-8">
-              <Link to="/pricing" className="text-sm font-medium text-primary">
-                Pricing
+              <Link to="/" className="text-sm font-medium hover:text-primary transition-colors">
+                Home
+              </Link>
+              <Link to="/about" className="text-sm font-medium hover:text-primary transition-colors">
+                About
               </Link>
               <Link to="/blog" className="text-sm font-medium hover:text-primary transition-colors">
                 Blog
               </Link>
-              <a href="/#features" className="text-sm font-medium hover:text-primary transition-colors">
-                Features
-              </a>
+              <Link to="/pricing" className="text-sm font-medium text-primary">
+                Pricing
+              </Link>
             </nav>
+            
             <Link to="/dashboard">
-              <Button>Dashboard</Button>
+              <Avatar className="cursor-pointer hover:ring-2 hover:ring-primary transition-all">
+                <AvatarFallback className="bg-primary text-primary-foreground">
+                  <Users className="h-5 w-5" />
+                </AvatarFallback>
+              </Avatar>
             </Link>
           </div>
         </div>

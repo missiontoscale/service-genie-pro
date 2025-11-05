@@ -4,7 +4,7 @@ import { Sparkles } from "lucide-react";
 const Footer = () => {
   return (
     <footer className="border-t border-border bg-background/95 backdrop-blur-sm">
-      <div className="container mx-auto px-6 py-12">
+      <div className="container mx-auto px-6 py-12 flex flex-col items-center">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div className="space-y-4">
             <div className="flex items-center gap-2">
@@ -30,9 +30,9 @@ const Footer = () => {
                 </Link>
               </li>
               <li>
-                <a href="#features" className="text-muted-foreground hover:text-foreground transition-colors">
+                <Link to="/#features" className="text-muted-foreground hover:text-foreground transition-colors">
                   Features
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
@@ -62,19 +62,19 @@ const Footer = () => {
             <h4 className="font-semibold mb-4">Company</h4>
             <ul className="space-y-2 text-sm">
               <li>
-                <a href="#" className="text-muted-foreground hover:text-foreground transition-colors">
+                <Link to="/about" className="text-muted-foreground hover:text-foreground transition-colors">
                   About
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="text-muted-foreground hover:text-foreground transition-colors">
+                <Link to="/privacy" className="text-muted-foreground hover:text-foreground transition-colors">
                   Privacy Policy
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="text-muted-foreground hover:text-foreground transition-colors">
+                <Link to="/privacy" className="text-muted-foreground hover:text-foreground transition-colors">
                   Terms of Service
-                </a>
+                </Link>
               </li>
             </ul>
           </div>

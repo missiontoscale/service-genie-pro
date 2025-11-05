@@ -1,16 +1,18 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Sparkles } from "lucide-react";
 
 const Onboarding = () => {
   const navigate = useNavigate();
   const [step, setStep] = useState(1);
+  const [agreedToPrivacy, setAgreedToPrivacy] = useState(false);
   const [formData, setFormData] = useState({
     businessType: "",
     industryFocus: "",
@@ -109,6 +111,23 @@ const Onboarding = () => {
                   onChange={(e) => setFormData({ ...formData, primaryGoal: e.target.value })}
                 />
               </div>
+              <div className="flex items-start space-x-2 pt-4">
+                <Checkbox
+                  id="privacy"
+                  checked={agreedToPrivacy}
+                  onCheckedChange={(checked) => setAgreedToPrivacy(checked as boolean)}
+                />
+                <label
+                  htmlFor="privacy"
+                  className="text-sm text-muted-foreground leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                >
+                  I agree to the{" "}
+                  <Link to="/privacy" className="text-primary hover:underline" target="_blank">
+                    Privacy Policy
+                  </Link>{" "}
+                  and Terms of Service
+                </label>
+              </div>
             </div>
           )}
 
@@ -123,6 +142,7 @@ const Onboarding = () => {
             <Button
               onClick={handleNext}
               className="flex-1"
+              disabled={step === 3 && !agreedToPrivacy}
             >
               {step === 3 ? "Get Started" : "Next"}
             </Button>
