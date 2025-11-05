@@ -46,11 +46,11 @@ const About = () => {
       <main className="flex-1">
         <section className="py-24 bg-gradient-to-br from-primary/5 via-background to-accent/5">
           <div className="container mx-auto px-6">
-            <div className="max-w-4xl mx-auto">
-              <h1 className="text-4xl md:text-5xl font-bold mb-6 text-left">
+            <div className="max-w-4xl mx-auto text-center">
+              <h1 className="text-4xl md:text-5xl font-bold mb-6">
                 Streamlining Business Documentation with AI
               </h1>
-              <p className="text-xl text-muted-foreground mb-8 text-left">
+              <p className="text-xl text-muted-foreground mb-8">
                 QuoteFlow AI was built to solve a simple problem: creating professional quotes and invoices shouldn't take hours. With our AI-powered platform, you can generate beautiful, accurate business documents in minutes.
               </p>
             </div>
@@ -60,7 +60,7 @@ const About = () => {
         <section className="py-24 bg-background">
           <div className="container mx-auto px-6">
             <div className="max-w-4xl mx-auto">
-              <h2 className="text-3xl font-bold mb-12 text-left">Our Mission</h2>
+              <h2 className="text-3xl font-bold mb-12 text-center">Our Mission</h2>
               <div className="grid md:grid-cols-3 gap-8">
                 <div className="space-y-4">
                   <div className="h-12 w-12 rounded-lg bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center">
@@ -96,8 +96,8 @@ const About = () => {
 
         <section className="py-24 bg-gradient-to-br from-background via-background to-primary/5">
           <div className="container mx-auto px-6">
-            <div className="max-w-4xl mx-auto text-left space-y-6">
-              <h2 className="text-3xl font-bold text-left">Why QuoteFlow AI?</h2>
+            <div className="max-w-4xl mx-auto text-center space-y-6">
+              <h2 className="text-3xl font-bold">Why QuoteFlow AI?</h2>
               <p className="text-lg text-muted-foreground">
                 In today's fast-paced business environment, time is your most valuable asset. Traditional invoicing and quoting tools are often complex, requiring extensive setup and training. QuoteFlow AI changes that.
               </p>

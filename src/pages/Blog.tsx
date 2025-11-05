@@ -74,11 +74,11 @@ const Blog = () => {
       <main className="flex-1">
         <section className="py-24 bg-gradient-to-br from-background via-background to-primary/5">
           <div className="container mx-auto px-6">
-            <div className="mb-16">
-              <h1 className="text-4xl md:text-5xl font-bold mb-4 text-left">
+            <div className="mb-16 text-center">
+              <h1 className="text-4xl md:text-5xl font-bold mb-4">
                 Insights & Resources
               </h1>
-              <p className="text-xl text-muted-foreground text-left">
+              <p className="text-xl text-muted-foreground">
                 Learn how to streamline your business with tips, tutorials, and industry insights
               </p>
             </div>

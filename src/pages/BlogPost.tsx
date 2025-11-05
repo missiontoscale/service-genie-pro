@@ -3,6 +3,9 @@ import { Sparkles, Calendar, User, ArrowLeft, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Footer from "@/components/Footer";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import blogAiInvoicing from "@/assets/blog-ai-invoicing.jpg";
+import blogQuoteManagement from "@/assets/blog-quote-management.jpg";
+import blogFutureBusiness from "@/assets/blog-future-business.jpg";
 
 const blogContent = {
   "ai-powered-invoicing": {
@@ -10,26 +13,31 @@ const blogContent = {
     author: "Sarah Johnson",
     date: "2024-01-15",
     category: "Tutorial",
+    image: blogAiInvoicing,
     content: [
       {
-        heading: "Introduction to AI-Powered Invoicing",
-        text: "Traditional invoicing can be time-consuming and prone to errors. With QuoteFlow AI, you can leverage artificial intelligence to streamline your entire invoicing workflow. In this comprehensive guide, we'll walk you through everything you need to know to get started."
+        heading: "The AI Revolution in Business Documentation",
+        text: "Artificial intelligence has fundamentally transformed how modern businesses handle documentation. What once took hours of manual data entry, formatting, and calculation can now be accomplished in minutes with AI-powered tools. This paradigm shift isn't just about speed—it's about accuracy, consistency, and freeing professionals to focus on what truly matters: building relationships and growing their business."
       },
       {
-        heading: "Setting Up Your First Invoice",
-        text: "Creating your first invoice with QuoteFlow AI is incredibly simple. Start by navigating to the dashboard and clicking 'New Invoice'. The AI will guide you through the process, automatically formatting your document and suggesting line items based on your business type."
+        heading: "Why Traditional Invoicing Falls Short",
+        text: "Traditional invoicing methods suffer from several critical inefficiencies. Manual data entry introduces human error, inconsistent formatting damages your professional image, and the time spent on administrative tasks directly reduces billable hours. Research shows that professionals spend an average of 2-3 hours per week just on invoice creation and management. For a solo consultant or small business, that's nearly 150 hours annually—equivalent to nearly a month of productive work lost to paperwork."
       },
       {
-        heading: "Leveraging AI for Accuracy",
-        text: "One of the biggest advantages of using AI for invoicing is the reduction in human error. Our system automatically validates currency formats, calculates taxes correctly, and ensures all required fields are completed. This means less time double-checking and more time focusing on your business."
+        heading: "How AI-Powered Invoicing Works",
+        text: "Modern AI invoicing platforms like QuoteFlow AI leverage natural language processing and machine learning to understand your business context. Simply describe your services, client details, and project scope in plain language, and the AI automatically structures this into professional, formatted invoices. The system learns from your patterns—recognizing your common services, typical rates, and preferred formatting—to make each subsequent invoice faster and more accurate than the last."
       },
       {
-        heading: "Multi-Currency Support",
-        text: "Working with international clients? QuoteFlow AI supports multiple currencies including USD, EUR, GBP, NGN, and many African currencies. The system can even help you convert between currencies at current exchange rates, making global business operations seamless."
+        heading: "Key Features That Save Time",
+        text: "Smart template selection adapts to your industry and client type. Automatic calculation handles taxes, discounts, and currency conversions flawlessly. Client data remembering means you never enter the same information twice. Multi-currency support allows seamless international billing. Version control and history tracking provide complete audit trails. These features combine to reduce invoice creation time from 20-30 minutes to under 2 minutes per document."
       },
       {
-        heading: "Export and Share",
-        text: "Once your invoice is ready, export it in multiple formats including PDF, CSV, DOCX, or JSON. Share directly with clients via email or download for your records. All documents are professionally formatted and ready for immediate use."
+        heading: "Best Practices for AI Invoicing",
+        text: "To maximize the benefits of AI-powered invoicing, maintain consistent naming conventions for services and clients. Review AI-generated invoices initially to ensure accuracy as the system learns your preferences. Use descriptive project names that help both you and your clients understand the work. Set up templates for recurring clients to streamline the process further. Keep your service catalog updated so the AI has current information to work with."
+      },
+      {
+        heading: "Getting Started Today",
+        text: "The barrier to entry for AI invoicing has never been lower. Most platforms offer free tiers that let you create your first invoices immediately without any financial commitment. Start with a simple project—invoice a recent client using AI assistance. Compare the time and effort to your traditional method. Most users report immediate time savings and never look back. The key is to start small, learn the system, and gradually transition your entire invoicing workflow to AI-powered automation."
       }
     ]
   },
@@ -38,30 +46,27 @@ const blogContent = {
     author: "Michael Chen",
     date: "2024-01-10",
     category: "Best Practices",
+    image: blogQuoteManagement,
     content: [
       {
-        heading: "Why Quote Management Matters",
-        text: "Effective quote management is crucial for converting prospects into paying customers. A well-organized quote system helps you respond quickly to opportunities, maintain professional standards, and track your sales pipeline efficiently."
+        heading: "Master Your Quote-to-Close Ratio",
+        text: "Your quote-to-close ratio is one of the most critical metrics in service-based businesses. It reveals not just your sales effectiveness, but the quality of your lead qualification and pricing strategy. A healthy ratio sits between 20-40% for most professional services. Track every quote you send and its outcome—won, lost, or pending. Analyze patterns: which services convert best? What price points see the highest acceptance? Which client types are most likely to proceed? This data becomes your strategic advantage, informing everything from marketing focus to pricing adjustments."
       },
       {
-        heading: "Tip 1: Standardize Your Templates",
-        text: "Create consistent, professional templates for different service types. QuoteFlow AI allows you to save custom templates that reflect your brand while maintaining flexibility for customization. This ensures every quote looks polished and professional."
+        heading: "Speed Matters More Than Perfection",
+        text: "In competitive markets, response time can be more crucial than price. Studies show that businesses responding to quote requests within one hour are seven times more likely to qualify leads than those waiting even two hours. This doesn't mean sending rushed, unprofessional quotes. Instead, invest in systems that enable rapid, professional responses. AI-powered tools can generate comprehensive, polished quotes in minutes based on brief project descriptions. Build a library of pre-approved service descriptions and pricing frameworks. The goal is to be the first thorough, professional quote a prospect receives—not the cheapest or most detailed arriving days later."
       },
       {
-        heading: "Tip 2: Track Quote Status",
-        text: "Keep tabs on which quotes are pending, accepted, or rejected. Our dashboard provides a clear overview of all your quotes, helping you follow up at the right time and understand your conversion rates."
+        heading: "Create Tiered Options, Not Single Quotes",
+        text: "Present clients with three pricing tiers: a baseline solution, your recommended approach, and a premium option. This strategy serves multiple purposes. It anchors pricing perception—the middle option often appears most reasonable when contrasted with higher and lower alternatives. It educates clients about value differences rather than just price. It captures clients at different budget levels rather than losing them entirely with a single take-it-or-leave-it price. Most importantly, it positions you as a strategic partner offering solutions, not a commodity provider quoting prices. Even when clients choose the baseline, you've established a relationship and credibility that can grow over time."
       },
       {
-        heading: "Tip 3: Use Accurate Pricing",
-        text: "Leverage the AI to suggest pricing based on industry standards and your historical data. This helps you stay competitive while maintaining healthy profit margins."
+        heading: "Build Systematic Follow-Up Processes",
+        text: "Most sales are lost not to rejection but to neglect. A quote sent without follow-up is essentially money left on the table. Implement a structured follow-up cadence: send the quote immediately with clear next steps, follow up at 3 days if you haven't heard back with additional value or case studies, check in at 7 days offering to answer questions or adjust the scope, make a final courtesy follow-up at 14 days before archiving as inactive. Use CRM tools or simple spreadsheets to track these touches. Make each follow-up valuable—share relevant case studies, offer to discuss specific aspects in detail, or provide market insights. You're not pestering; you're demonstrating commitment and professionalism."
       },
       {
-        heading: "Tip 4: Respond Quickly",
-        text: "Speed matters in business. With QuoteFlow AI, you can generate professional quotes in minutes, not hours. Quick response times can be the difference between winning and losing a deal."
-      },
-      {
-        heading: "Tip 5: Learn from Your Data",
-        text: "Analyze your quote acceptance rates and identify patterns. Which services have the highest conversion? What price points work best? Use these insights to refine your strategy over time."
+        heading: "Learn From Lost Opportunities",
+        text: "Every declined quote is a learning opportunity worth its weight in gold. When you lose a bid, politely ask for feedback. Frame it as professional development, not sales persistence: 'I'm always working to improve my services and proposals. Would you mind sharing what factor ultimately influenced your decision?' You'll be surprised how many people provide valuable insights. Common themes emerge: pricing concerns, scope misalignment, timing issues, or simply choosing a known provider. This intelligence directly informs your quote strategy—adjusting pricing, clarifying scope presentation, or refining your ideal client profile. The businesses that actively learn from lost quotes systematically improve their win rates over time, turning early setbacks into future competitive advantages."
       }
     ]
   },
@@ -70,30 +75,31 @@ const blogContent = {
     author: "Emily Davis",
     date: "2024-01-05",
     category: "Industry Insights",
+    image: blogFutureBusiness,
     content: [
       {
-        heading: "The Evolution of Business Documents",
-        text: "Business documentation has come a long way from handwritten ledgers and typewritten invoices. Today, we're witnessing another revolution driven by artificial intelligence and automation. Let's explore what the future holds."
+        heading: "From Paper to Prediction: The Evolution Continues",
+        text: "Business documentation has undergone remarkable transformation over the past three decades. We've progressed from typewritten forms and carbon copies, through the desktop publishing revolution, into the cloud-based collaboration era. Now we stand at the threshold of the next paradigm: predictive, intelligent documentation that doesn't just record business activities but actively facilitates them. AI-powered systems are beginning to anticipate documentation needs, auto-generate accurate records from minimal input, and provide strategic insights from the documents they create. This isn't incremental improvement—it's a fundamental reimagining of what business documentation can be."
       },
       {
-        heading: "AI as Your Business Assistant",
-        text: "Modern AI doesn't just format documents—it understands context, suggests improvements, and learns from your preferences. QuoteFlow AI represents this new generation of intelligent tools that adapt to your unique business needs."
+        heading: "AI as Your Documentation Partner",
+        text: "The next generation of business documentation tools won't just execute commands—they'll understand context, learn preferences, and provide strategic guidance. Imagine describing a project to your AI assistant, which then generates not just an invoice, but suggests optimal pricing based on market rates and your historical data, identifies potential scope creep risks based on similar past projects, drafts contract addendums if the work differs from standard terms, and even predicts payment likelihood based on client patterns. This isn't science fiction—these capabilities are emerging now. The AI becomes a strategic business partner, bringing data-driven insights to every transaction while handling the administrative burden entirely."
       },
       {
-        heading: "Automation Without Losing the Human Touch",
-        text: "While automation speeds up processes, maintaining personalization is crucial. The best AI tools enhance human creativity rather than replace it. Our platform automates repetitive tasks while leaving room for your unique voice and branding."
+        heading: "Blockchain and Immutable Business Records",
+        text: "Blockchain technology is poised to revolutionize business documentation verification and trust. Imagine invoices, contracts, and quotes that are cryptographically verifiable, automatically enforceable, and permanently auditable without central authority. Smart contracts could automatically release payments when deliverables are verified, eliminating payment delays and disputes. International transactions could settle instantly without bank intermediaries. Audit trails would be unalterable and transparent. While mainstream adoption is still developing, forward-thinking businesses are already experimenting with blockchain-based documentation systems, particularly in industries where verification and trust are paramount—legal services, supply chain management, and financial services."
       },
       {
-        heading: "Global Business Made Easy",
-        text: "As businesses increasingly operate across borders, tools must support multiple currencies, languages, and regulations. AI-powered platforms can automatically adapt to different regional requirements, making international business more accessible."
+        heading: "The Rise of Zero-Input Documentation",
+        text: "The ultimate efficiency is documentation that creates itself. Advanced AI systems are approaching this reality by monitoring your work, understanding deliverables, and auto-generating appropriate documentation. Your project management tool communicates with your invoicing system, which knows your rates and client terms. When you mark a project phase complete, an invoice is generated, reviewed by AI for accuracy and completeness, and queued for your approval—all without manual data entry. Calendar integrations track billable time automatically. Email analysis understands client conversations and suggests relevant quote updates. The professional's role shifts from data entry to strategic oversight, approving rather than creating, guiding rather than executing."
       },
       {
-        heading: "Security and Compliance",
-        text: "The future of business documentation includes enhanced security measures and automated compliance checking. AI can help ensure your documents meet regulatory requirements while protecting sensitive client information."
+        heading: "Regulatory Technology and Compliance Automation",
+        text: "As regulations grow more complex globally, manual compliance becomes increasingly risky and resource-intensive. AI-powered documentation systems are evolving to embed regulatory intelligence directly into document creation. Your invoicing tool automatically applies correct tax rates based on client location and service type. It flags potential compliance issues before documents are sent. It maintains audit-ready records automatically. For businesses operating internationally, these systems navigate the labyrinth of varying VAT rules, withholding requirements, and documentation standards without requiring deep expertise from users. Compliance becomes automatic, dramatically reducing risk while freeing professionals to focus on their craft rather than regulatory minutiae."
       },
       {
-        heading: "What's Next?",
-        text: "We're just scratching the surface of what's possible. Future developments may include real-time collaboration, predictive analytics for cash flow, and even deeper integration with other business tools. The goal remains constant: empowering professionals to work smarter, not harder."
+        heading: "Preparing Your Business for the Future",
+        text: "The businesses that will thrive in this new era are those preparing today. Start by adopting cloud-based, AI-enhanced tools now—even if you're not using all features yet. Build clean data practices: consistent naming, proper categorization, complete records. These habits ensure your data becomes more valuable as AI capabilities expand. Invest in understanding your documentation data: what patterns exist, what insights are hiding in your invoice history, what your quote-to-close funnel reveals. Stay informed about emerging technologies—not to adopt everything immediately, but to recognize opportunities when they mature. The future of business documentation is being built now. The question isn't whether these changes will come—it's whether your business will be ready to leverage them when they do."
       }
     ]
   }
@@ -155,24 +161,34 @@ const BlogPost = () => {
       </header>
 
       <main className="flex-1">
-        <article className="py-24">
-          <div className="container mx-auto px-6 max-w-4xl">
-            <Link to="/blog" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground mb-8">
-              <ArrowLeft className="h-4 w-4" />
+        {/* Hero Banner with Image */}
+        <div className="relative h-96 w-full overflow-hidden">
+          <img 
+            src={post.image} 
+            alt={post.title}
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent" />
+        </div>
+
+        <article className="container mx-auto px-6 py-12 max-w-4xl">
+          <div className="mb-8">
+            <Link to="/blog" className="inline-flex items-center text-sm text-muted-foreground hover:text-primary transition-colors mb-6">
+              <ArrowLeft className="h-4 w-4 mr-2" />
               Back to Blog
             </Link>
-
-            <div className="mb-8">
-              <span className="bg-primary/10 text-primary px-3 py-1 rounded-md text-sm font-medium">
+            
+            <div className="flex items-center gap-2 text-sm text-muted-foreground mb-4">
+              <span className="bg-primary/10 text-primary px-3 py-1 rounded-md">
                 {post.category}
               </span>
             </div>
 
-            <h1 className="text-4xl md:text-5xl font-bold mb-6 text-left">
+            <h1 className="text-4xl md:text-5xl font-bold mb-6 text-center">
               {post.title}
             </h1>
 
-            <div className="flex items-center gap-6 text-sm text-muted-foreground mb-12">
+            <div className="flex items-center justify-center gap-6 text-sm text-muted-foreground">
               <div className="flex items-center gap-2">
                 <User className="h-4 w-4" />
                 {post.author}
@@ -186,24 +202,30 @@ const BlogPost = () => {
                 })}
               </div>
             </div>
+          </div>
 
-            <div className="prose prose-lg max-w-none">
-              {post.content.map((section, index) => (
-                <div key={index} className="mb-8">
-                  <h2 className="text-2xl font-semibold mb-4 text-left">{section.heading}</h2>
-                  <p className="text-muted-foreground leading-relaxed text-left">{section.text}</p>
-                </div>
-              ))}
-            </div>
+          <div className="prose prose-lg max-w-none">
+            {post.content.map((section: any, index: number) => (
+              <div key={index} className="mb-12">
+                <h2 className="text-3xl font-bold mb-4 text-center">{section.heading}</h2>
+                <p className="text-lg text-muted-foreground leading-relaxed text-center">
+                  {section.text}
+                </p>
+              </div>
+            ))}
+          </div>
 
-            <div className="mt-16 pt-8 border-t border-border">
-              <Link to="/blog">
-                <Button variant="outline" className="gap-2">
-                  <ArrowLeft className="h-4 w-4" />
-                  Read More Articles
-                </Button>
-              </Link>
-            </div>
+          <div className="mt-16 pt-8 border-t border-border text-center">
+            <h3 className="text-2xl font-bold mb-4">Ready to Get Started?</h3>
+            <p className="text-muted-foreground mb-6">
+              Experience the power of AI-driven business documentation
+            </p>
+            <Link to="/dashboard">
+              <Button size="lg" className="gap-2">
+                <Sparkles className="h-5 w-5" />
+                Try QuoteFlow AI Free
+              </Button>
+            </Link>
           </div>
         </article>
       </main>

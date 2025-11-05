@@ -69,15 +69,15 @@ const Index = () => {
       <main>
         <section className="relative overflow-hidden bg-gradient-to-br from-primary/10 via-background to-accent/10">
           <div className="container mx-auto px-6 py-24 md:py-32">
-            <div className="max-w-3xl space-y-8">
-              <h1 className="text-5xl md:text-6xl font-bold tracking-tight text-left">
+            <div className="max-w-3xl mx-auto text-center space-y-8">
+              <h1 className="text-5xl md:text-6xl font-bold tracking-tight">
                 Create Professional Quotes & Invoices in Minutes
                 <span className="block text-primary mt-2">Powered by AI</span>
               </h1>
-              <p className="text-xl text-muted-foreground text-left">
+              <p className="text-xl text-muted-foreground">
                 Streamline your business documentation with intelligent automation. Built for freelancers, consultants, and service providers who value their time.
               </p>
-              <div className="flex gap-4">
+              <div className="flex gap-4 justify-center">
                 <Link to="/dashboard">
                   <Button size="lg" className="gap-2 shadow-lg">
                     <Sparkles className="h-5 w-5" />
@@ -91,9 +91,9 @@ const Index = () => {
 
         <section id="features" className="py-24 bg-background">
           <div className="container mx-auto px-6">
-            <div className="mb-16">
-              <h2 className="text-3xl font-bold mb-4 text-left">Everything You Need to Manage Your Business</h2>
-              <p className="text-muted-foreground text-lg text-left">
+            <div className="mb-16 text-center">
+              <h2 className="text-3xl font-bold mb-4">Everything You Need to Manage Your Business</h2>
+              <p className="text-muted-foreground text-lg">
                 Powerful features that save you time and help you look professional
               </p>
             </div>
@@ -119,9 +119,9 @@ const Index = () => {
 
         <section className="py-24 bg-gradient-to-br from-primary/10 via-background to-accent/10">
           <div className="container mx-auto px-6">
-            <div className="max-w-2xl">
-              <h2 className="text-3xl font-bold mb-4 text-left">Ready to Transform Your Workflow?</h2>
-              <p className="text-muted-foreground text-lg mb-8 text-left">
+            <div className="max-w-2xl mx-auto text-center">
+              <h2 className="text-3xl font-bold mb-4">Ready to Transform Your Workflow?</h2>
+              <p className="text-muted-foreground text-lg mb-8">
                 Join professionals worldwide who save hours every week with AI-powered business documentation
               </p>
               <Link to="/dashboard">
