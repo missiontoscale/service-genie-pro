@@ -99,6 +99,25 @@ const NewInvoice = () => {
     setLoading(true);
 
     try {
+      // Validate form data
+      const { invoiceSchema } = await import("@/lib/formSchemas");
+      
+      const validatedData = invoiceSchema.parse({
+        clientName,
+        clientEmail,
+        providerName,
+        providerEmail,
+        providerAddress,
+        invoiceNumber,
+        dueDate,
+        notes,
+        items: items.map(item => ({
+          description: item.description,
+          quantity: item.quantity,
+          rate: item.rate,
+        })),
+      });
+
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) throw new Error("Not authenticated");
 
@@ -163,9 +182,10 @@ const NewInvoice = () => {
         description: "Your invoice has been created successfully.",
       });
     } catch (error: any) {
+      console.error("Invoice creation error:", error);
       toast({
         title: "Error",
-        description: error.message,
+        description: error.errors?.[0]?.message || error.message || "Failed to create invoice",
         variant: "destructive",
       });
     } finally {

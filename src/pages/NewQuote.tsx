@@ -98,6 +98,24 @@ const NewQuote = () => {
     setLoading(true);
 
     try {
+      // Validate form data
+      const { quoteSchema } = await import("@/lib/formSchemas");
+      
+      const validatedData = quoteSchema.parse({
+        clientName,
+        clientEmail,
+        providerName,
+        providerEmail,
+        providerAddress,
+        title,
+        description,
+        items: items.map(item => ({
+          description: item.description,
+          quantity: item.quantity,
+          rate: item.rate,
+        })),
+      });
+
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) throw new Error("Not authenticated");
 
@@ -160,9 +178,10 @@ const NewQuote = () => {
         description: "Your quote has been created successfully.",
       });
     } catch (error: any) {
+      console.error("Quote creation error:", error);
       toast({
         title: "Error",
-        description: error.message,
+        description: error.errors?.[0]?.message || error.message || "Failed to create quote",
         variant: "destructive",
       });
     } finally {

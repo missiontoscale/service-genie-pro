@@ -1,4 +1,6 @@
+import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -11,48 +13,45 @@ serve(async (req) => {
   }
 
   try {
+    // Verify authentication
+    const authHeader = req.headers.get('Authorization');
+    if (!authHeader) {
+      return new Response(JSON.stringify({ error: 'Authentication required' }), 
+        { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+    }
+
+    const supabaseClient = createClient(
+      Deno.env.get('SUPABASE_URL') ?? '',
+      Deno.env.get('SUPABASE_ANON_KEY') ?? '',
+      { global: { headers: { Authorization: authHeader } } }
+    );
+
+    const { data: { user }, error: userError } = await supabaseClient.auth.getUser();
+    if (userError || !user) {
+      return new Response(JSON.stringify({ error: 'Invalid authentication' }), 
+        { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+    }
+
     const { prompt, type } = await req.json();
-    console.log('Received request:', { type, promptLength: prompt?.length });
+    
+    if (!prompt || typeof prompt !== 'string' || prompt.length > 5000) {
+      return new Response(JSON.stringify({ error: 'Invalid prompt' }), 
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+    }
+
+    if (!type || !['invoice', 'quote'].includes(type)) {
+      return new Response(JSON.stringify({ error: 'Invalid type' }), 
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+    }
 
     const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
     if (!LOVABLE_API_KEY) {
-      console.error('LOVABLE_API_KEY not configured');
       throw new Error('AI service not configured');
     }
 
     const systemPrompt = type === 'quote' 
-      ? `You are a professional business assistant helping to create quotes. Based on the user's description, generate:
-1. A professional title
-2. Line items with descriptions, quantities, and rates
-3. Keep rates realistic and market-appropriate
-
-Return a JSON object with this structure:
-{
-  "title": "string",
-  "items": [
-    {
-      "description": "string",
-      "quantity": number,
-      "rate": number
-    }
-  ]
-}`
-      : `You are a professional business assistant helping to create invoices. Based on the user's description, generate:
-1. A professional invoice number (format: INV-YYYY-MMDD-XXX)
-2. Line items with descriptions, quantities, and rates
-3. Keep rates realistic and market-appropriate
-
-Return a JSON object with this structure:
-{
-  "invoiceNumber": "string",
-  "items": [
-    {
-      "description": "string",
-      "quantity": number,
-      "rate": number
-    }
-  ]
-}`;
+      ? `Generate quote with title and items (description, quantity, rate). Context-aware pricing: Nigerian services in NGN (₦160k~$100), USD standard rates. Return JSON only.`
+      : `Generate invoice with invoiceNumber and items (description, quantity, rate). Context-aware pricing: Nigerian services in NGN (₦160k~$100), USD standard rates. Return JSON only.`;
 
     const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
       method: 'POST',
@@ -70,56 +69,32 @@ Return a JSON object with this structure:
     });
 
     if (!response.ok) {
-      const errorText = await response.text();
-      console.error('AI gateway error:', response.status, errorText);
-      
       if (response.status === 429) {
-        return new Response(
-          JSON.stringify({ error: 'Rate limit exceeded. Please try again later.' }),
-          { status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-        );
+        return new Response(JSON.stringify({ error: 'Rate limit exceeded' }), 
+          { status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
       }
-      
       if (response.status === 402) {
-        return new Response(
-          JSON.stringify({ error: 'AI credits exhausted. Please add credits to continue.' }),
-          { status: 402, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-        );
+        return new Response(JSON.stringify({ error: 'AI credits exhausted' }), 
+          { status: 402, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
       }
-      
-      throw new Error(`AI gateway error: ${response.status}`);
+      throw new Error('AI generation failed');
     }
 
     const data = await response.json();
-    console.log('AI response received');
-    
     const content = data.choices[0].message.content;
-    let generatedData;
     
     try {
-      // Try to parse JSON from the response
       const jsonMatch = content.match(/```json\n([\s\S]*?)\n```/) || content.match(/\{[\s\S]*\}/);
-      if (jsonMatch) {
-        generatedData = JSON.parse(jsonMatch[1] || jsonMatch[0]);
-      } else {
-        generatedData = JSON.parse(content);
-      }
+      const generatedData = JSON.parse(jsonMatch ? (jsonMatch[1] || jsonMatch[0]) : content);
+      return new Response(JSON.stringify(generatedData), {
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
     } catch (parseError) {
-      console.error('Failed to parse AI response:', content);
-      throw new Error('Failed to parse AI response');
+      return new Response(JSON.stringify({ error: 'Unable to process AI response' }), 
+        { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
     }
-
-    return new Response(JSON.stringify(generatedData), {
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-    });
   } catch (error: any) {
-    console.error('Error in generate-with-ai function:', error);
-    return new Response(
-      JSON.stringify({ error: error.message || 'An error occurred' }),
-      { 
-        status: 500, 
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
-      }
-    );
+    return new Response(JSON.stringify({ error: 'An unexpected error occurred' }), 
+      { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
   }
 });
