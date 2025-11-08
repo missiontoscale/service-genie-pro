@@ -28,6 +28,7 @@ const NewQuote = () => {
   const [providerAddress, setProviderAddress] = useState("");
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+  const [category, setCategory] = useState("");
   const [currency, setCurrency] = useState("USD");
   const [items, setItems] = useState([
     { id: 1, description: "", quantity: 1, rate: 0 },
@@ -132,6 +133,7 @@ const NewQuote = () => {
           provider_address: providerAddress,
           title,
           description,
+          category: category || undefined,
           currency,
           subtotal,
           tax,

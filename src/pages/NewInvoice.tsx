@@ -29,6 +29,7 @@ const NewInvoice = () => {
   const [invoiceNumber, setInvoiceNumber] = useState("");
   const [dueDate, setDueDate] = useState("");
   const [notes, setNotes] = useState("");
+  const [category, setCategory] = useState("");
   const [currency, setCurrency] = useState("USD");
   const [items, setItems] = useState([
     { id: 1, description: "", quantity: 1, rate: 0 },
@@ -134,6 +135,7 @@ const NewInvoice = () => {
           provider_address: providerAddress,
           invoice_number: invoiceNumber,
           due_date: dueDate,
+          category: category || undefined,
           notes,
           currency,
           subtotal,

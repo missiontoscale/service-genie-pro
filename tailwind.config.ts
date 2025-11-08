@@ -14,9 +14,10 @@ export default {
     },
     extend: {
       fontFamily: {
+        sans: ['Inter', 'sans-serif'],
+        heading: ['Playfair Display', 'serif'],
         playfair: ['Playfair Display', 'serif'],
         inter: ['Inter', 'sans-serif'],
-        sans: ['Inter', 'sans-serif'],
       },
       colors: {
         border: "hsl(var(--border))",
@@ -62,6 +63,13 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        chart: {
+          '1': 'hsl(142.1 76.2% 36.3%)',
+          '2': 'hsl(217.2 91.2% 59.8%)',
+          '3': 'hsl(0 84.2% 60.2%)',
+          '4': 'hsl(45 93.4% 47.5%)',
+          '5': 'hsl(271.5 81.3% 55.9%)',
+        }
       },
       borderRadius: {
         lg: "var(--radius)",

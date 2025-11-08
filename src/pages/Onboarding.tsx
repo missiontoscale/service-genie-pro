@@ -7,24 +7,95 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Sparkles } from "lucide-react";
+import { Sparkles, Upload } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 
 const Onboarding = () => {
   const navigate = useNavigate();
+  const { toast } = useToast();
   const [step, setStep] = useState(1);
   const [agreedToPrivacy, setAgreedToPrivacy] = useState(false);
+  const [logoFile, setLogoFile] = useState<File | null>(null);
+  const [logoPreview, setLogoPreview] = useState<string>("");
   const [formData, setFormData] = useState({
+    fullName: "",
     businessType: "",
     industryFocus: "",
+    location: "",
     monthlyVolume: "",
     primaryGoal: "",
   });
 
-  const handleNext = () => {
+  const handleLogoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setLogoFile(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setLogoPreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleNext = async () => {
     if (step < 3) {
       setStep(step + 1);
     } else {
+      await saveProfile();
+    }
+  };
+
+  const saveProfile = async () => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error("No user found");
+
+      let logoUrl = "";
+      
+      // Upload logo if provided
+      if (logoFile) {
+        const fileExt = logoFile.name.split('.').pop();
+        const fileName = `${user.id}/logo.${fileExt}`;
+        const { error: uploadError } = await supabase.storage
+          .from('user-logos')
+          .upload(fileName, logoFile, { upsert: true });
+
+        if (uploadError) throw uploadError;
+
+        const { data: { publicUrl } } = supabase.storage
+          .from('user-logos')
+          .getPublicUrl(fileName);
+        
+        logoUrl = publicUrl;
+      }
+
+      // Save profile
+      const { error } = await supabase
+        .from('user_profiles')
+        .upsert({
+          user_id: user.id,
+          full_name: formData.fullName,
+          business_name: formData.industryFocus,
+          location: formData.location,
+          company_logo: logoUrl,
+        }, { onConflict: 'user_id' });
+
+      if (error) throw error;
+
+      toast({
+        title: "Success",
+        description: "Profile setup complete!",
+      });
+
       navigate("/dashboard");
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error.message,
+        variant: "destructive",
+      });
     }
   };
 
@@ -38,7 +109,7 @@ const Onboarding = () => {
         <CardHeader className="space-y-1">
           <div className="flex items-center gap-2 mb-2">
             <Sparkles className="h-6 w-6 text-primary" />
-            <CardTitle className="text-2xl font-bold">Welcome to QuoteFlow AI</CardTitle>
+            <CardTitle className="text-2xl font-bold font-heading">Welcome to Quotla</CardTitle>
           </div>
           <CardDescription>
             Let's personalize your experience (Step {step} of 3)
@@ -46,6 +117,46 @@ const Onboarding = () => {
         </CardHeader>
         <CardContent className="space-y-6">
           {step === 1 && (
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="fullName">Full Name / Company Name</Label>
+                <Input
+                  id="fullName"
+                  placeholder="John Doe or Acme Inc"
+                  value={formData.fullName}
+                  onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="location">Location</Label>
+                <Input
+                  id="location"
+                  placeholder="e.g., Lagos, Nigeria or New York, USA"
+                  value={formData.location}
+                  onChange={(e) => setFormData({ ...formData, location: e.target.value })}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="logo">Company Logo (Optional)</Label>
+                <div className="flex items-center gap-4">
+                  {logoPreview && (
+                    <img src={logoPreview} alt="Logo preview" className="h-16 w-16 rounded object-cover" />
+                  )}
+                  <div className="flex-1">
+                    <Input
+                      id="logo"
+                      type="file"
+                      accept="image/*"
+                      onChange={handleLogoChange}
+                      className="cursor-pointer"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {step === 2 && (
             <div className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="businessType">What type of business do you run?</Label>
@@ -74,11 +185,6 @@ const Onboarding = () => {
                   onChange={(e) => setFormData({ ...formData, industryFocus: e.target.value })}
                 />
               </div>
-            </div>
-          )}
-
-          {step === 2 && (
-            <div className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="monthlyVolume">How many quotes/invoices do you send monthly?</Label>
                 <Select
@@ -102,7 +208,7 @@ const Onboarding = () => {
           {step === 3 && (
             <div className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="primaryGoal">What's your primary goal with QuoteFlow AI?</Label>
+                <Label htmlFor="primaryGoal">What's your primary goal with Quotla?</Label>
                 <Textarea
                   id="primaryGoal"
                   placeholder="e.g., Save time creating quotes, Track invoices better, Automate my workflow..."

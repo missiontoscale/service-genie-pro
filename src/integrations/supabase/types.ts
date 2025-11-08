@@ -51,6 +51,7 @@ export type Database = {
       }
       invoices: {
         Row: {
+          category: string | null
           client_email: string
           client_name: string
           created_at: string
@@ -70,6 +71,7 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          category?: string | null
           client_email: string
           client_name: string
           created_at?: string
@@ -89,6 +91,7 @@ export type Database = {
           user_id: string
         }
         Update: {
+          category?: string | null
           client_email?: string
           client_name?: string
           created_at?: string
@@ -146,6 +149,7 @@ export type Database = {
       }
       quotes: {
         Row: {
+          category: string | null
           client_email: string
           client_name: string
           created_at: string
@@ -164,6 +168,7 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          category?: string | null
           client_email: string
           client_name: string
           created_at?: string
@@ -182,6 +187,7 @@ export type Database = {
           user_id: string
         }
         Update: {
+          category?: string | null
           client_email?: string
           client_name?: string
           created_at?: string
@@ -206,8 +212,11 @@ export type Database = {
           business_address: string | null
           business_email: string | null
           business_name: string | null
+          company_logo: string | null
           created_at: string
+          full_name: string | null
           id: string
+          location: string | null
           updated_at: string
           user_id: string
         }
@@ -215,8 +224,11 @@ export type Database = {
           business_address?: string | null
           business_email?: string | null
           business_name?: string | null
+          company_logo?: string | null
           created_at?: string
+          full_name?: string | null
           id?: string
+          location?: string | null
           updated_at?: string
           user_id: string
         }
@@ -224,8 +236,11 @@ export type Database = {
           business_address?: string | null
           business_email?: string | null
           business_name?: string | null
+          company_logo?: string | null
           created_at?: string
+          full_name?: string | null
           id?: string
+          location?: string | null
           updated_at?: string
           user_id?: string
         }

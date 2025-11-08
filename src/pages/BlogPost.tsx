@@ -25,7 +25,7 @@ const blogContent = {
       },
       {
         heading: "How AI-Powered Invoicing Works",
-        text: "Modern AI invoicing platforms like QuoteFlow AI leverage natural language processing and machine learning to understand your business context. Simply describe your services, client details, and project scope in plain language, and the AI automatically structures this into professional, formatted invoices. The system learns from your patterns—recognizing your common services, typical rates, and preferred formatting—to make each subsequent invoice faster and more accurate than the last."
+        text: "Modern AI invoicing platforms like Quotla leverage natural language processing and machine learning to understand your business context. Simply describe your services, client details, and project scope in plain language, and the AI automatically structures this into professional, formatted invoices. The system learns from your patterns—recognizing your common services, typical rates, and preferred formatting—to make each subsequent invoice faster and more accurate than the last."
       },
       {
         heading: "Key Features That Save Time",
@@ -129,8 +129,8 @@ const BlogPost = () => {
           <div className="flex items-center justify-center gap-32">
             <Link to="/" className="flex items-center gap-2">
               <Sparkles className="h-6 w-6 text-primary" />
-              <span className="text-xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-                QuoteFlow AI
+              <span className="text-xl font-bold font-heading bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+                Quotla
               </span>
             </Link>
             
@@ -223,7 +223,7 @@ const BlogPost = () => {
             <Link to="/dashboard">
               <Button size="lg" className="gap-2">
                 <Sparkles className="h-5 w-5" />
-                Try QuoteFlow AI Free
+                Try Quotla Free
               </Button>
             </Link>
           </div>

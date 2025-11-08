@@ -40,8 +40,8 @@ const Blog = () => {
           <div className="flex items-center justify-center gap-32">
             <Link to="/" className="flex items-center gap-2">
               <Sparkles className="h-6 w-6 text-primary" />
-              <span className="text-xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-                QuoteFlow AI
+              <span className="text-xl font-bold font-heading bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+                Quotla
               </span>
             </Link>
             
