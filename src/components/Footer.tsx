@@ -4,9 +4,9 @@ import { Sparkles, Facebook, Twitter, Instagram, Linkedin } from "lucide-react";
 const Footer = () => {
   return (
     <footer className="border-t border-border bg-background/95 backdrop-blur-sm">
-      <div className="container mx-auto px-6 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 text-center md:text-left">
-          <div className="space-y-4 flex flex-col items-center md:items-start">
+      <div className="container mx-auto px-4 sm:px-6 py-12">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 text-center sm:text-left">
+          <div className="space-y-4 flex flex-col items-center sm:items-start">
             <div className="flex items-center gap-2">
               <Sparkles className="h-5 w-5 text-primary" />
               <span className="font-playfair font-bold text-lg">Quotla</span>
@@ -15,15 +15,15 @@ const Footer = () => {
               Professional quotes and invoices powered by AI. Built for modern professionals.
             </p>
             <div className="space-y-2 text-sm text-muted-foreground">
-              <p className="flex items-center justify-center md:justify-start gap-2">
+              <p className="flex items-center justify-center sm:justify-start gap-2">
                 <span>📞</span>
                 <a href="tel:+2347032589067" className="hover:text-foreground transition-colors">
                   +234 703258 9067
                 </a>
               </p>
-              <p className="flex items-center justify-center md:justify-start gap-2">
+              <p className="flex items-center justify-center sm:justify-start gap-2">
                 <span>✉️</span>
-                <a href="mailto:chibuzordev@gmail.com" className="hover:text-foreground transition-colors">
+                <a href="mailto:chibuzordev@gmail.com" className="hover:text-foreground transition-colors break-all">
                   chibuzordev@gmail.com
                 </a>
               </p>

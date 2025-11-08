@@ -8,22 +8,32 @@ const features = [
   {
     icon: Sparkles,
     title: "AI-Powered Generation",
-    description: "Let AI help you create professional quotes and invoices in seconds",
+    description: "Leverage artificial intelligence to auto-generate professional quotes and invoices with intelligent field suggestions, saving hours of manual data entry.",
   },
   {
     icon: FileText,
     title: "Smart Templates",
-    description: "Beautiful, customizable templates that adapt to your brand",
+    description: "Access a library of beautiful, industry-specific templates that automatically adapt to your brand colors, logo, and business identity.",
   },
   {
     icon: Zap,
     title: "Lightning Fast",
-    description: "Create, send, and track documents faster than ever before",
+    description: "Create complete documents in under 60 seconds. Send via email, download as PDF, or export to CSV with a single click for seamless workflow integration.",
   },
   {
     icon: CheckCircle2,
     title: "Easy Management",
-    description: "Keep track of all your quotes and invoices in one place",
+    description: "Organize all your quotes and invoices in one secure dashboard. Filter by client, status, or category to find what you need instantly.",
+  },
+  {
+    icon: Users,
+    title: "Client Organization",
+    description: "Tag and categorize documents by client or project. Track payment status, due dates, and maintain a complete history of all transactions.",
+  },
+  {
+    icon: Receipt,
+    title: "Multi-Currency Support",
+    description: "Work with clients worldwide. Support for multiple currencies and automatic calculation of taxes, subtotals, and line items for accurate billing.",
   },
 ];
 
@@ -40,17 +50,17 @@ const Index = () => {
               </span>
             </Link>
             
-            <nav className="hidden md:flex items-center gap-8">
-              <Link to="/" className="text-sm font-medium text-primary">
+            <nav className="flex items-center gap-4 md:gap-8">
+              <Link to="/" className="text-xs md:text-sm font-medium text-primary">
                 Home
               </Link>
-              <Link to="/about" className="text-sm font-medium hover:text-primary transition-colors">
+              <Link to="/about" className="text-xs md:text-sm font-medium hover:text-primary transition-colors">
                 About
               </Link>
-              <Link to="/blog" className="text-sm font-medium hover:text-primary transition-colors">
+              <Link to="/blog" className="text-xs md:text-sm font-medium hover:text-primary transition-colors">
                 Blog
               </Link>
-              <Link to="/pricing" className="text-sm font-medium hover:text-primary transition-colors">
+              <Link to="/pricing" className="text-xs md:text-sm font-medium hover:text-primary transition-colors">
                 Pricing
               </Link>
             </nav>
@@ -97,7 +107,7 @@ const Index = () => {
                 Powerful features that save you time and help you look professional
               </p>
             </div>
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
               {features.map((feature) => {
                 const Icon = feature.icon;
                 return (
@@ -109,10 +119,101 @@ const Index = () => {
                       <Icon className="h-6 w-6 text-primary" />
                     </div>
                     <h4 className="font-semibold text-lg mb-2">{feature.title}</h4>
-                    <p className="text-muted-foreground text-sm">{feature.description}</p>
+                    <p className="text-muted-foreground text-sm leading-relaxed">{feature.description}</p>
                   </div>
                 );
               })}
+            </div>
+          </div>
+        </section>
+
+        <section className="py-24 bg-muted/30">
+          <div className="container mx-auto px-6">
+            <div className="mb-16 text-center">
+              <h2 className="text-3xl font-bold mb-4">Trusted by Professionals Worldwide</h2>
+              <p className="text-muted-foreground text-lg">
+                See what our users have to say about Quotla
+              </p>
+            </div>
+            <div className="relative overflow-hidden max-w-4xl mx-auto">
+              <div className="flex animate-[slide_30s_linear_infinite] hover:[animation-play-state:paused]">
+                <div className="flex gap-6 min-w-full">
+                  <div className="flex-shrink-0 w-80 p-6 rounded-xl border border-border bg-card">
+                    <p className="text-muted-foreground mb-4">"Quotla has transformed how I handle invoicing. What used to take 30 minutes now takes just 2. The AI suggestions are incredibly accurate!"</p>
+                    <div className="flex items-center gap-3">
+                      <div className="h-10 w-10 rounded-full bg-primary/20 flex items-center justify-center">
+                        <span className="text-sm font-semibold text-primary">SJ</span>
+                      </div>
+                      <div>
+                        <p className="font-semibold text-sm">Sarah Johnson</p>
+                        <p className="text-xs text-muted-foreground">Freelance Designer</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex-shrink-0 w-80 p-6 rounded-xl border border-border bg-card">
+                    <p className="text-muted-foreground mb-4">"The best investment for my consulting business. Clean interface, powerful features, and the multi-currency support is a game-changer."</p>
+                    <div className="flex items-center gap-3">
+                      <div className="h-10 w-10 rounded-full bg-primary/20 flex items-center justify-center">
+                        <span className="text-sm font-semibold text-primary">MC</span>
+                      </div>
+                      <div>
+                        <p className="font-semibold text-sm">Michael Chen</p>
+                        <p className="text-xs text-muted-foreground">Business Consultant</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex-shrink-0 w-80 p-6 rounded-xl border border-border bg-card">
+                    <p className="text-muted-foreground mb-4">"I love how organized everything is. Finding old quotes is instant, and the export options make it easy to share with my accountant."</p>
+                    <div className="flex items-center gap-3">
+                      <div className="h-10 w-10 rounded-full bg-primary/20 flex items-center justify-center">
+                        <span className="text-sm font-semibold text-primary">EP</span>
+                      </div>
+                      <div>
+                        <p className="font-semibold text-sm">Emily Porter</p>
+                        <p className="text-xs text-muted-foreground">Marketing Strategist</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="flex gap-6 min-w-full" aria-hidden="true">
+                  <div className="flex-shrink-0 w-80 p-6 rounded-xl border border-border bg-card">
+                    <p className="text-muted-foreground mb-4">"Quotla has transformed how I handle invoicing. What used to take 30 minutes now takes just 2. The AI suggestions are incredibly accurate!"</p>
+                    <div className="flex items-center gap-3">
+                      <div className="h-10 w-10 rounded-full bg-primary/20 flex items-center justify-center">
+                        <span className="text-sm font-semibold text-primary">SJ</span>
+                      </div>
+                      <div>
+                        <p className="font-semibold text-sm">Sarah Johnson</p>
+                        <p className="text-xs text-muted-foreground">Freelance Designer</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex-shrink-0 w-80 p-6 rounded-xl border border-border bg-card">
+                    <p className="text-muted-foreground mb-4">"The best investment for my consulting business. Clean interface, powerful features, and the multi-currency support is a game-changer."</p>
+                    <div className="flex items-center gap-3">
+                      <div className="h-10 w-10 rounded-full bg-primary/20 flex items-center justify-center">
+                        <span className="text-sm font-semibold text-primary">MC</span>
+                      </div>
+                      <div>
+                        <p className="font-semibold text-sm">Michael Chen</p>
+                        <p className="text-xs text-muted-foreground">Business Consultant</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex-shrink-0 w-80 p-6 rounded-xl border border-border bg-card">
+                    <p className="text-muted-foreground mb-4">"I love how organized everything is. Finding old quotes is instant, and the export options make it easy to share with my accountant."</p>
+                    <div className="flex items-center gap-3">
+                      <div className="h-10 w-10 rounded-full bg-primary/20 flex items-center justify-center">
+                        <span className="text-sm font-semibold text-primary">EP</span>
+                      </div>
+                      <div>
+                        <p className="font-semibold text-sm">Emily Porter</p>
+                        <p className="text-xs text-muted-foreground">Marketing Strategist</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </section>

@@ -1,5 +1,5 @@
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
-import { FileText, Receipt, Home, Sparkles, LogOut } from "lucide-react";
+import { FileText, Receipt, Home, Sparkles, LogOut, Settings as SettingsIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
@@ -10,6 +10,7 @@ const navigation = [
   { name: "Overview", href: "/dashboard", icon: Home },
   { name: "Quotes", href: "/dashboard/quotes", icon: FileText },
   { name: "Invoices", href: "/dashboard/invoices", icon: Receipt },
+  { name: "Settings", href: "/dashboard/settings", icon: SettingsIcon },
 ];
 
 const Dashboard = () => {

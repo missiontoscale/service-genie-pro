@@ -274,15 +274,15 @@ const NewInvoice = () => {
               Your invoice has been created. You can now export it in your preferred format.
             </p>
             <div className="flex gap-3 flex-wrap">
-              <Button onClick={() => exportToPDF(createdInvoiceData)} className="gap-2">
+              <Button onClick={() => exportToPDF(createdInvoiceData, `invoice-${createdInvoiceData.invoice_number}`, 'invoice')} className="gap-2">
                 <Download className="h-4 w-4" />
                 Export as PDF
               </Button>
-              <Button onClick={() => exportToCSV(createdInvoiceData)} variant="outline" className="gap-2">
+              <Button onClick={() => exportToCSV([createdInvoiceData], `invoice-${createdInvoiceData.invoice_number}`)} variant="outline" className="gap-2">
                 <Download className="h-4 w-4" />
                 Export as CSV
               </Button>
-              <Button onClick={() => exportToJSON(createdInvoiceData)} variant="outline" className="gap-2">
+              <Button onClick={() => exportToJSON(createdInvoiceData, `invoice-${createdInvoiceData.invoice_number}`)} variant="outline" className="gap-2">
                 <Download className="h-4 w-4" />
                 Export as JSON
               </Button>

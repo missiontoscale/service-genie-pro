@@ -270,15 +270,15 @@ const NewQuote = () => {
               Your quote has been created. You can now export it in your preferred format.
             </p>
             <div className="flex gap-3 flex-wrap">
-              <Button onClick={() => exportToPDF(createdQuoteData)} className="gap-2">
+              <Button onClick={() => exportToPDF(createdQuoteData, `quote-${createdQuoteData.title.replace(/\s+/g, '-').toLowerCase()}`, 'quote')} className="gap-2">
                 <Download className="h-4 w-4" />
                 Export as PDF
               </Button>
-              <Button onClick={() => exportToCSV(createdQuoteData)} variant="outline" className="gap-2">
+              <Button onClick={() => exportToCSV([createdQuoteData], `quote-${createdQuoteData.title.replace(/\s+/g, '-').toLowerCase()}`)} variant="outline" className="gap-2">
                 <Download className="h-4 w-4" />
                 Export as CSV
               </Button>
-              <Button onClick={() => exportToJSON(createdQuoteData)} variant="outline" className="gap-2">
+              <Button onClick={() => exportToJSON(createdQuoteData, `quote-${createdQuoteData.title.replace(/\s+/g, '-').toLowerCase()}`)} variant="outline" className="gap-2">
                 <Download className="h-4 w-4" />
                 Export as JSON
               </Button>

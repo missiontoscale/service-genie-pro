@@ -10,6 +10,9 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Sparkles, Upload } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import onboardingStep1 from "@/assets/onboarding-step1.jpg";
+import onboardingStep2 from "@/assets/onboarding-step2.jpg";
+import onboardingStep3 from "@/assets/onboarding-step3.jpg";
 
 const Onboarding = () => {
   const navigate = useNavigate();
@@ -118,6 +121,9 @@ const Onboarding = () => {
         <CardContent className="space-y-6">
           {step === 1 && (
             <div className="space-y-4">
+              <div className="rounded-lg overflow-hidden mb-6">
+                <img src={onboardingStep1} alt="Setup your business profile" className="w-full h-48 object-cover" />
+              </div>
               <div className="space-y-2">
                 <Label htmlFor="fullName">Full Name / Company Name</Label>
                 <Input
@@ -158,6 +164,9 @@ const Onboarding = () => {
 
           {step === 2 && (
             <div className="space-y-4">
+              <div className="rounded-lg overflow-hidden mb-6">
+                <img src={onboardingStep2} alt="Create documents with AI" className="w-full h-48 object-cover" />
+              </div>
               <div className="space-y-2">
                 <Label htmlFor="businessType">What type of business do you run?</Label>
                 <Select
@@ -207,6 +216,9 @@ const Onboarding = () => {
 
           {step === 3 && (
             <div className="space-y-4">
+              <div className="rounded-lg overflow-hidden mb-6">
+                <img src={onboardingStep3} alt="Start creating documents" className="w-full h-48 object-cover" />
+              </div>
               <div className="space-y-2">
                 <Label htmlFor="primaryGoal">What's your primary goal with Quotla?</Label>
                 <Textarea

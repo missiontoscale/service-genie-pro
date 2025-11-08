@@ -21,6 +21,7 @@ import Quotes from "./pages/Quotes";
 import Invoices from "./pages/Invoices";
 import NewQuote from "./pages/NewQuote";
 import NewInvoice from "./pages/NewInvoice";
+import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -48,8 +49,11 @@ const App = () => (
             <Route index element={<DashboardHome />} />
             <Route path="quotes" element={<Quotes />} />
             <Route path="quotes/new" element={<NewQuote />} />
+            <Route path="quotes/edit/:id" element={<NewQuote />} />
             <Route path="invoices" element={<Invoices />} />
             <Route path="invoices/new" element={<NewInvoice />} />
+            <Route path="invoices/edit/:id" element={<NewInvoice />} />
+            <Route path="settings" element={<Settings />} />
           </Route>
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
