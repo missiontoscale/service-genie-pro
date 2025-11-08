@@ -1,10 +1,15 @@
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
-import { FileText, Receipt, Home, Sparkles, LogOut, Settings as SettingsIcon } from "lucide-react";
+import { FileText, Receipt, Home, Sparkles, Settings as SettingsIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
-import { useEffect } from "react";
-import { useToast } from "@/hooks/use-toast";
+import { useEffect, useState } from "react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const navigation = [
   { name: "Overview", href: "/dashboard", icon: Home },
@@ -16,10 +21,12 @@ const navigation = [
 const Dashboard = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { toast } = useToast();
+  const [profileImage, setProfileImage] = useState("");
+  const [userInitials, setUserInitials] = useState("U");
 
   useEffect(() => {
     checkAuth();
+    loadUserProfile();
   }, []);
 
   const checkAuth = async () => {
@@ -29,20 +36,24 @@ const Dashboard = () => {
     }
   };
 
-  const handleLogout = async () => {
-    const { error } = await supabase.auth.signOut();
-    if (error) {
-      toast({
-        title: "Error",
-        description: error.message,
-        variant: "destructive",
-      });
-    } else {
-      toast({
-        title: "Logged out",
-        description: "You've been successfully logged out.",
-      });
-      navigate("/");
+  const loadUserProfile = async () => {
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) return;
+
+      const { data: profile } = await supabase
+        .from("user_profiles")
+        .select("*")
+        .eq("user_id", session.user.id)
+        .maybeSingle();
+
+      if (profile) {
+        setProfileImage(profile.company_logo || "");
+        const name = profile.full_name || profile.business_name || "User";
+        setUserInitials(name.substring(0, 2).toUpperCase());
+      }
+    } catch (error) {
+      console.error("Error loading profile:", error);
     }
   };
 
@@ -63,15 +74,24 @@ const Dashboard = () => {
             >
               Back to Home
             </Link>
-            <Button 
-              variant="ghost" 
-              size="sm" 
-              onClick={handleLogout}
-              className="gap-2"
-            >
-              <LogOut className="h-4 w-4" />
-              Logout
-            </Button>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Avatar className="cursor-pointer hover:ring-2 hover:ring-primary transition-all">
+                  {profileImage ? (
+                    <AvatarImage src={profileImage} alt="Profile" />
+                  ) : null}
+                  <AvatarFallback className="bg-primary text-primary-foreground">
+                    {userInitials}
+                  </AvatarFallback>
+                </Avatar>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-56">
+                <DropdownMenuItem onClick={() => navigate("/dashboard/settings")}>
+                  <SettingsIcon className="h-4 w-4 mr-2" />
+                  Settings
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
         </div>
       </header>
