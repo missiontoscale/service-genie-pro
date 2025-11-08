@@ -21,6 +21,9 @@ import Quotes from "./pages/Quotes";
 import Invoices from "./pages/Invoices";
 import NewQuote from "./pages/NewQuote";
 import NewInvoice from "./pages/NewInvoice";
+import ChatQuote from "./pages/ChatQuote";
+import EditQuote from "./pages/EditQuote";
+import EditInvoice from "./pages/EditInvoice";
 import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
 
@@ -49,10 +52,11 @@ const App = () => (
             <Route index element={<DashboardHome />} />
             <Route path="quotes" element={<Quotes />} />
             <Route path="quotes/new" element={<NewQuote />} />
-            <Route path="quotes/edit/:id" element={<NewQuote />} />
+            <Route path="quotes/chat" element={<ChatQuote />} />
+            <Route path="quotes/edit/:id" element={<EditQuote />} />
             <Route path="invoices" element={<Invoices />} />
             <Route path="invoices/new" element={<NewInvoice />} />
-            <Route path="invoices/edit/:id" element={<NewInvoice />} />
+            <Route path="invoices/edit/:id" element={<EditInvoice />} />
             <Route path="settings" element={<Settings />} />
           </Route>
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
